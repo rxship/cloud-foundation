@@ -1,0 +1,16 @@
+# Terraform state
+*.tfstate
+*.tfstate.*
+
+# Terraform working dirs and plugins
+**/.terraform/*
+
+# Crash & plan files
+crash.log
+crash.*.log
+*.tfplan
+
+# macOS
+.DS_Store
+# Local secret values (never commit)
+*.auto.tfvars

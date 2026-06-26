@@ -1,0 +1,7 @@
+# Copy this file to terraform.tfvars and fill in your own values.
+environment    = "dev"
+location       = "canadacentral"
+key_vault_name = "kv-cf-dev-XXXX"   # globally-unique Key Vault name
+
+# Provide your Key Vault admin object ID in a gitignored *.auto.tfvars file:
+#   key_vault_admin_object_id = "<your-azure-ad-user-object-id>"

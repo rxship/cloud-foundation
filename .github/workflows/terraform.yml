@@ -1,0 +1,48 @@
+name: Terraform CloudFoundation
+
+on:
+    pull_request:
+        branches: [main]
+    push:
+        branches: [main]
+
+permissions:
+    id-token: write 
+    contents: read
+
+env:
+    ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+    ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    ARM_USE_OIDC: true
+    TF_VAR_key_vault_admin_object_id: ${{ secrets.AZURE_KV_ADMIN_OBJECT_ID }}
+
+jobs:
+    plan:
+        if: github.event_name == 'pull_request'
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: environments/dev
+        steps:
+            - uses: actions/checkout@v4
+            - uses: hashicorp/setup-terraform@v3
+              with:
+                  terraform_version: 1.15.6
+            - run: terraform init
+            - run: terraform validate
+            - run: terraform plan -no-color
+
+    apply: 
+        if: github.event_name == 'push'
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: environments/dev
+        steps:
+            - uses: actions/checkout@v4
+            - uses: hashicorp/setup-terraform@v3
+              with:
+                  terraform_version: 1.15.6
+            - run: terraform init
+            - run: terraform apply -auto-approve
